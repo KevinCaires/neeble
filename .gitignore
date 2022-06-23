@@ -3,3 +3,7 @@
 
 # ENVVARS
 environment/*
+
+# Pycache
+.pyc
+__pycache__
