@@ -22,7 +22,7 @@ class Cursor:
         """
         Context manager.
         """
-        self.conn = MySQLdb.connect(**self.configuration, charset='utf-8')
+        self.conn = MySQLdb.connect(**self.configuration)
         self.cursor = self.conn.cursor()
 
         return self.cursor
@@ -46,13 +46,14 @@ class DataBase:
         Create tables.
         """
         _sql = '''
-            create if not exists neeble_quotes(
+            create table if not exists neeble_quotes(
+                id int auto_increment primary key,
                 user varchar(200) not null,
-                quote varchar(1000) not null unique
+                quote text not null unique
             );
         '''
         try:
             with Cursor(MYSQL_CONFIG) as cursor:
                 cursor.execute(_sql)
         except Exception as ex:
-            logger.error(ex.args[0])
+            logger.error(ex.args)
