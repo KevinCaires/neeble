@@ -10,14 +10,13 @@ from utils.database import DataBase
 
 logger = logging.getLogger(__name__)
 
-
+    
 manage = ArgumentParser(
     description='Neeble discord bot.'
 )
 manage.add_argument(
     'command',
     type=str,
-    required=True,
 )
 command = manage.parse_args()
 
