@@ -36,24 +36,20 @@ class Cursor:
         self.conn.close()
 
 
-class DataBase:
+def migrate() -> None:
     """
-    Database handler.
+    Create tables.
     """
-    @staticmethod
-    def migrate() -> None:
-        """
-        Create tables.
-        """
-        _sql = '''
-            create table if not exists neeble_quotes(
-                id int auto_increment primary key,
-                user varchar(200) not null,
-                quote text not null unique
-            );
-        '''
-        try:
-            with Cursor(MYSQL_CONFIG) as cursor:
-                cursor.execute(_sql)
-        except Exception as ex:
-            logger.error(ex.args)
+    _sql = '''
+        create table if not exists neeble_quotes(
+            id int auto_increment primary key,
+            user varchar(200) not null,
+            quote varchar(500) not null unique,
+            index quote_idx (quote)
+        );
+    '''
+    try:
+        with Cursor(MYSQL_CONFIG) as cursor:
+            cursor.execute(_sql)
+    except Exception as ex:
+        logger.error(ex.args)

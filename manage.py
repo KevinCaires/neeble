@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 
 from settings.config import DISCORD_BOT_TOKEN
 from utils.commands import client
-from utils.database import DataBase
+from utils.database import migrate
 
 logger = logging.getLogger(__name__)
 
@@ -26,4 +26,4 @@ if command.command == 'run':
     except Exception as ex:
         logger.error(ex.args[0])
 elif command.command == 'migrate':
-    DataBase.migrate()
+    migrate()
