@@ -13,10 +13,15 @@ logger = logging.getLogger(__name__)
 
 
 @client.command(aliases=['q'])
-async def quote(bot: object, quote: str) -> str:
+async def quote(bot: object, *quote: str) -> str:
     """
     Save a quote into database.
     """
+    if not quote:
+        return await bot.send('Insert a message to save.')
+
+    quote = ' '.join(quote)
+
     try:
         user = bot.author.name
         set_quote(user, quote)
