@@ -53,3 +53,29 @@ def migrate() -> None:
             cursor.execute(_sql)
     except Exception as ex:
         logger.error(ex.args)
+
+
+def set_quote(user: str, quote: str) -> None:
+    """
+    Set a quote into database.
+    """
+    _sql = f'''
+        insert into neeble_quotes(user, quote)
+        value("{user}", "{quote}");
+    '''
+    with Cursor(MYSQL_CONFIG) as cursor:
+        cursor.execute(_sql)
+
+def get_quote() -> tuple:
+    """
+    Get the saved quotes.
+    """
+    _sql = f'''
+        select quote, user
+        from neeble_quotes;
+    '''
+    response = None
+    with Cursor(MYSQL_CONFIG) as cursor:
+        cursor.execute(_sql)
+        response = cursor.fetchall()
+    return response
