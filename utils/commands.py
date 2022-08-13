@@ -50,3 +50,17 @@ async def random_quote(bot: object) -> str:
         return await bot.send(f'{chosen_one[0]}\n`By: {chosen_one[1]}`')
     except Exception as ex:
         return await bot.send(ex)
+
+@client.command(aliases=['qstack'])
+async def random_quote(bot: object) -> str:
+    """
+    Displays the 5 quote history stack
+    """
+    id_stack = ""
+    for qid in quote_id_stack:
+        id_stack = id_stack + qid
+
+    rmessage = "A list of the 5 latest message IDs follows: " + id_stack
+
+    return await bot.sent(rmessage)
+
