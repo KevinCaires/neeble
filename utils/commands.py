@@ -11,6 +11,7 @@ from utils.database import get_quote, set_quote
 client = commands.Bot(command_prefix='~')
 logger = logging.getLogger(__name__)
 
+quote_id_stack = []
 
 @client.command(aliases=['q'])
 async def quote(bot: object, *quote: str) -> str:
@@ -36,8 +37,14 @@ async def random_quote(bot: object) -> str:
     """
     Get an random quote from database.
     """
+    while chosen_one[2] in quote_id_stack:
     quotes = get_quote()
     chosen_one = choice(quotes)
+
+    quote_id_stack.add(chosen_one[2])
+
+    if len(quote_id_stack) >= 5:
+        quote_id_stack[0].pop()
 
     try:
         return await bot.send(f'{chosen_one[0]}\n`By: {chosen_one[1]}`')

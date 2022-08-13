@@ -71,7 +71,7 @@ def get_quote() -> tuple:
     Get the saved quotes.
     """
     _sql = f'''
-        select quote, user
+        select quote, user, id
         from neeble_quotes;
     '''
     response = None
