@@ -51,6 +51,7 @@ async def random_quote(bot: object) -> str:
     except Exception as ex:
         return await bot.send(ex)
 
+
 @client.command(aliases=['qstack'])
 async def queue_stack(bot: object) -> str:
     """
@@ -63,4 +64,3 @@ async def queue_stack(bot: object) -> str:
     rmessage = "A list of the 5 latest message IDs follows: " + id_stack
 
     return await bot.send(rmessage)
-
