@@ -19,7 +19,7 @@ MYSQL_CONFIG = {
 # Define the log level
 LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
 
-# Configuração do logging.
+# Logging custom config.
 LOGGING_CONFIG = {
     'version': 1,
     'disable_existing_loggers': False,
