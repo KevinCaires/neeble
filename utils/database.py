@@ -68,7 +68,7 @@ def set_quote(user: str, quote: str) -> None:
     with Cursor(MYSQL_CONFIG) as cursor:
         cursor.execute(_sql)
 
-def get_quote() -> tuple:
+def get_quotes() -> tuple:
     """
     Get the saved quotes.
     """
