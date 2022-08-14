@@ -2,6 +2,8 @@
 Database utils module.
 """
 import logging
+from collections import namedtuple
+
 import MySQLdb
 from settings.config import MYSQL_CONFIG
 
@@ -74,8 +76,11 @@ def get_quote() -> tuple:
         select quote, user, id
         from neeble_quotes;
     '''
-    response = None
+    response = []
+    obj = namedtuple('Quotes', ['quote', 'user', 'id'])
+
     with Cursor(MYSQL_CONFIG) as cursor:
         cursor.execute(_sql)
         response = cursor.fetchall()
-    return response
+
+    return tuple(obj(*r) for r in response)
