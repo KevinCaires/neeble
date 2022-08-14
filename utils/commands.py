@@ -24,7 +24,6 @@ async def quote(bot: object, *quote: str) -> str:
     quote = ' '.join(quote)
 
     try:
-        quote = quote.encode('utf-8')
         user = bot.author.name
         set_quote(user, quote)
     except Exception as ex:
@@ -56,7 +55,7 @@ async def random_quote(bot: object) -> str:
     try:
         # To image links.
         if 'http' in chosen_one.quote:
-            return await bot.send(f'{chosen_one.quote.encode("utf-8")}')
+            return await bot.send(f'{chosen_one.quote}')
         return await bot.send(f'{chosen_one.quote}\n`By: {chosen_one.user}`')
 
     except Exception as ex:
