@@ -1,0 +1,43 @@
+name: neeble
+
+# The build section defines how to build the images of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#build
+build:
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_NEEBLE_REGISTRY: image registry
+  #  - OKTETO_BUILD_NEEBLE_REPOSITORY: image repo
+  #  - OKTETO_BUILD_NEEBLE_IMAGE: image name
+  #  - OKTETO_BUILD_NEEBLE_TAG: image tag
+  neeble:
+    context: neeble
+    dockerfile: Dockerfile
+
+# The deploy section defines how to deploy your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#deploy
+deploy:
+  compose:
+    file: docker-compose.yml
+    services:
+      - mysql
+      - neeble
+
+# The dependencies section defines other git repositories to be deployed as part of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#dependencies
+# dependencies:
+#   - https://github.com/okteto/sample
+
+
+# The dev section defines how to activate a development container
+# More info: https://www.okteto.com/docs/reference/manifest/#dev
+dev:
+  neeble:
+    command: make production
+    workdir: /usr/src/app
+    sync:
+      - .:/usr/src/app
+    reverse:
+      - 9000:9000
+    volumes:
+      - /root/.cache/pip
+
