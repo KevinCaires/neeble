@@ -23,6 +23,7 @@ async def quote(bot: object, *quote: str) -> str:
     quote = ' '.join(quote)
 
     try:
+        quote = quote.encode('utf-8')
         user = bot.author.name
         set_quote(user, quote)
     except Exception as ex:
