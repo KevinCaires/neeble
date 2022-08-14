@@ -8,7 +8,7 @@ from discord.ext import commands
 
 from utils.database import get_quotes, set_quote
 
-client = commands.Bot(command_prefix='~')
+client = commands.Bot(command_prefix='--')
 logger = logging.getLogger(__name__)
 
 quote_id_stack = []
