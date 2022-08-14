@@ -38,10 +38,10 @@ async def random_quote(bot: object) -> str:
     Get an random quote from database.
     """
     while chosen_one[2] in quote_id_stack:
-    quotes = get_quote()
-    chosen_one = choice(quotes)
+        quotes = get_quote()
+        chosen_one = choice(quotes)
 
-    quote_id_stack.add(chosen_one[2])
+        quote_id_stack.add(chosen_one[2])
 
     if len(quote_id_stack) >= 5:
         quote_id_stack[0].pop()
@@ -52,7 +52,7 @@ async def random_quote(bot: object) -> str:
         return await bot.send(ex)
 
 @client.command(aliases=['qstack'])
-async def random_quote(bot: object) -> str:
+async def queue_stack(bot: object) -> str:
     """
     Displays the 5 quote history stack
     """
@@ -62,5 +62,5 @@ async def random_quote(bot: object) -> str:
 
     rmessage = "A list of the 5 latest message IDs follows: " + id_stack
 
-    return await bot.sent(rmessage)
+    return await bot.send(rmessage)
 
