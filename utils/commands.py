@@ -6,7 +6,7 @@ from random import choice
 
 from discord.ext import commands
 
-from utils.database import get_quote, set_quote
+from utils.database import get_quotes, set_quote
 
 client = commands.Bot(command_prefix='~')
 logger = logging.getLogger(__name__)
@@ -37,17 +37,27 @@ async def random_quote(bot: object) -> str:
     """
     Get an random quote from database.
     """
-    while chosen_one[2] in quote_id_stack:
-        quotes = get_quote()
-        chosen_one = choice(quotes)
+    quotes = get_quotes(quote_id_stack)
+    stack_len = len(quote_id_stack)
 
-        quote_id_stack.add(chosen_one[2])
+    if not quotes and stack_len > 0:
+        quote_id_stack.pop(0)
+        quotes = get_quotes(quote_id_stack)
+    elif not quotes:
+        return await bot.send('Have no one quote saved.')
 
-    if len(quote_id_stack) >= 5:
-        quote_id_stack[0].pop()
+    chosen_one = choice(quotes)
+    quote_id_stack.append(chosen_one.id)
+
+    if stack_len >= 5:
+        quote_id_stack.pop(0)
 
     try:
-        return await bot.send(f'{chosen_one[0]}\n`By: {chosen_one[1]}`')
+        # To image links.
+        if 'http' in chosen_one.quote:
+            return await bot.send(f'{chosen_one.quote}')
+        return await bot.send(f'{chosen_one.quote}\n`By: {chosen_one.user}`')
+
     except Exception as ex:
         return await bot.send(ex)
 

@@ -68,14 +68,16 @@ def set_quote(user: str, quote: str) -> None:
     with Cursor(MYSQL_CONFIG) as cursor:
         cursor.execute(_sql)
 
-def get_quotes() -> tuple:
+def get_quotes(ids: list) -> tuple:
     """
     Get the saved quotes.
+    ids: List of quote ID's
     """
     _sql = f'''
         select quote, user, id
-        from neeble_quotes;
+        from neeble_quotes
     '''
+    _sql = _sql + f' where id not in ({",".join([str(id) for id in ids])});' if ids else _sql + ';'
     response = []
     obj = namedtuple('Quotes', ['quote', 'user', 'id'])
 
