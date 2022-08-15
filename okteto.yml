@@ -1,5 +1,11 @@
 name: neeble
 
+dependencies:
+  neeble:
+    repository: https://github.com/KevinCaires/neeble
+    manifest: okteto.yml
+    branch: develop
+
 build:
   neeble:
     context: .
@@ -11,15 +17,6 @@ deploy:
     file: docker-compose.yml
     services:
       - mysql
+    file: docker-compose.yml
+    services:
       - neeble
-
-dev:
-  neeble:
-    command: make production
-    workdir: /usr/src/app
-    sync:
-      - .:/usr/src/app
-    reverse:
-      - 9000:9000
-    volumes:
-      - /root/.cache/pip
