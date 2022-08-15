@@ -17,6 +17,4 @@ deploy:
     file: docker-compose.yml
     services:
       - mysql
-    file: docker-compose.yml
-    services:
       - neeble
