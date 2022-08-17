@@ -67,10 +67,6 @@ async def queue_stack(bot: object) -> str:
     """
     Displays the 5 quote history stack
     """
-    id_stack = ""
-    for qid in quote_id_stack:
-        id_stack = id_stack + qid
-
-    rmessage = "A list of the 5 latest message IDs follows: " + id_stack
-
-    return await bot.send(rmessage)
+    return await bot.send(
+        f'A list of the 5 latest message IDs follows: `{",".join(str(q) for q in quote_id_stack)}`'
+    )
