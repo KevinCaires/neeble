@@ -6,7 +6,7 @@ from random import choice
 
 from discord.ext import commands
 
-from utils.database import get_by_id, get_quotes, set_quote
+from utils.database import get_by_id, get_quotes, remove_quote, set_quote
 
 client = commands.Bot(command_prefix='--')
 logger = logging.getLogger(__name__)
@@ -89,6 +89,34 @@ async def by_id(bot, _id: int=None) -> str:
     except Exception as ex:
         return await bot.send(ex)
 
+
+@client.command(aliases=['dq'])
+async def delete_quote(bot, _id: int=None) -> str:
+    """
+    Delete one quote by database ID.
+    """
+    roles = [r.name for r in bot.author.roles]
+
+    if not 'Operador' in roles:
+        return await bot.send("_Don't fuck, you ass hole_.\n"\
+            "_You have no permission for this command!_")
+
+    if not isinstance(_id, int) or not _id:
+        return await bot.send("_Don't fuck, you ass hole_.\nThe ID need to be a interger!")
+
+    quote = get_by_id(_id)
+
+    if not quote:
+        return await bot.send("_Got wrong, you socker!_\nThis ID doesn't exist in database!")
+
+    try:
+        if not remove_quote(_id):
+            return await bot.send('_Something wrong happen, dude!_')
+        return await bot.send('_Evidence deleted, fella!_')
+
+    except Exception as ex:
+        return await bot.send(ex)
+    
 
 @client.command(aliases=['qstack'])
 async def queue_stack(bot: object) -> str:
