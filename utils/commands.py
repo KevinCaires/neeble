@@ -23,11 +23,15 @@ async def quote(bot: object, *quote: str) -> str:
 
     quote = ' '.join(quote)
 
+    if 'http' in quote and 'discord' in quote and not quote[-4:] == '.png':
+        return await bot.send("- _Don't fuck, dumb ass!_\n"\
+            "- _Hey put a valid image link, bitch!_\n- _Are you an idiot? You mother fucker!_")
+
     try:
         user = bot.author.name
         set_quote(user, quote)
     except Exception as ex:
-        return await bot.send(ex.args)
+        return await bot.send(f'{ex.args}\n_What that fuck you doing?_')
     else:
         return await bot.send('Done:\n`%s`' % quote)
 
