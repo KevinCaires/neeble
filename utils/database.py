@@ -86,3 +86,24 @@ def get_quotes(ids: list) -> tuple:
         response = cursor.fetchall()
 
     return tuple(obj(*r) for r in response)
+
+
+def get_by_id(id: int) -> object:
+    """
+    Get one quote by ID.
+    """
+    obj = namedtuple('Quotes', ['quote', 'user', 'id'])
+    _sql = f'''
+        select quote, user, id
+        from neeble_quotes
+        where id={id};
+    '''
+
+    with Cursor(MYSQL_CONFIG) as cursor:
+        cursor.execute(_sql)
+        quote = cursor.fetchone()
+
+    if not quote:
+        return None
+
+    return obj(*quote)
