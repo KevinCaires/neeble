@@ -6,7 +6,7 @@ from random import choice
 
 from discord.ext import commands
 
-from utils.database import get_quotes, set_quote
+from utils.database import get_by_id, get_quotes, remove_quote, set_quote
 
 client = commands.Bot(command_prefix='--')
 logger = logging.getLogger(__name__)
@@ -19,15 +19,19 @@ async def quote(bot: object, *quote: str) -> str:
     Save a quote into database.
     """
     if not quote:
-        return await bot.send('Insert a message to save.')
+        return await bot.send('Insert a message to save.\n_Your dumb ass!_')
 
     quote = ' '.join(quote)
+
+    if 'http' in quote and 'discord' in quote and not quote[-4:] == '.png':
+        return await bot.send("- _Don't fuck, dumb ass!_\n"\
+            "- _Hey put a valid image link, bitch!_\n- _Are you an idiot? You mother fucker!_")
 
     try:
         user = bot.author.name
         set_quote(user, quote)
     except Exception as ex:
-        return await bot.send(ex.args)
+        return await bot.send(f'{ex.args}\n_What that fuck you doing?_')
     else:
         return await bot.send('Done:\n`%s`' % quote)
 
@@ -38,18 +42,19 @@ async def random_quote(bot: object) -> str:
     Get an random quote from database.
     """
     quotes = get_quotes(quote_id_stack)
+    stack_limit = int((len(quotes) * .5))
     stack_len = len(quote_id_stack)
 
     if not quotes and stack_len > 0:
         quote_id_stack.pop(0)
         quotes = get_quotes(quote_id_stack)
     elif not quotes:
-        return await bot.send('Have no one quote saved.')
+        return await bot.send('Have no one quote saved.\n_Hey jerk, coffee?_')
 
     chosen_one = choice(quotes)
     quote_id_stack.append(chosen_one.id)
 
-    if stack_len >= 5:
+    if stack_len >= stack_limit:
         quote_id_stack.pop(0)
 
     try:
@@ -62,15 +67,61 @@ async def random_quote(bot: object) -> str:
         return await bot.send(ex)
 
 
+@client.command(aliases=['bid'])
+async def by_id(bot, _id: int=None) -> str:
+    """
+    Get quote by ID.
+    """
+    if not isinstance(_id, int) or not _id:
+        return await bot.send("_Don't fuck, you ass hole_.\nThe ID need to be a interger!")
+
+    quote = get_by_id(_id)
+
+    if not quote:
+        return await bot.send("_Got wrong, you socker!_\nThis ID doesn't exist in database!")
+
+    try:
+        # To image links.
+        if 'http' in quote.quote:
+            return await bot.send(f'{quote.quote}')
+        return await bot.send(f'{quote.quote}\n`By: {quote.user}`')
+
+    except Exception as ex:
+        return await bot.send(ex)
+
+
+@client.command(aliases=['dq'])
+async def delete_quote(bot, _id: int=None) -> str:
+    """
+    Delete one quote by database ID.
+    """
+    roles = [r.name for r in bot.author.roles]
+
+    if not 'Operador' in roles:
+        return await bot.send("_Don't fuck, you ass hole_.\n"\
+            "_You have no permission for this command!_")
+
+    if not isinstance(_id, int) or not _id:
+        return await bot.send("_Don't fuck, you ass hole_.\nThe ID need to be a interger!")
+
+    quote = get_by_id(_id)
+
+    if not quote:
+        return await bot.send("_Got wrong, you socker!_\nThis ID doesn't exist in database!")
+
+    try:
+        if not remove_quote(_id):
+            return await bot.send('_Something wrong happen, dude!_')
+        return await bot.send('_Evidence deleted, fella!_')
+
+    except Exception as ex:
+        return await bot.send(ex)
+    
+
 @client.command(aliases=['qstack'])
 async def queue_stack(bot: object) -> str:
     """
     Displays the 5 quote history stack
     """
-    id_stack = ""
-    for qid in quote_id_stack:
-        id_stack = id_stack + qid
-
-    rmessage = "A list of the 5 latest message IDs follows: " + id_stack
-
-    return await bot.send(rmessage)
+    return await bot.send('A list of the 5 latest message IDs follows:'\
+        f' `{",".join(str(q) for q in quote_id_stack[-5:])}`')
