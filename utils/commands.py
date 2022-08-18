@@ -67,7 +67,7 @@ async def random_quote(bot: object) -> str:
         return await bot.send(ex)
 
 
-@client.command(aliases=['bid'])
+@client.command(aliases=['qid'])
 async def by_id(bot, _id: int=None) -> str:
     """
     Get quote by ID.
