@@ -78,7 +78,7 @@ async def by_id(bot, _id: int=None) -> str:
     quote = get_by_id(_id)
 
     if not quote:
-        return await bot.send("_Got wrong, you socker!_\nThis ID doesn't exist in database!")
+        return await bot.send("_Got wrong, you sucker!_\nThis ID doesn't exist in database!")
 
     try:
         # To image links.
@@ -107,7 +107,7 @@ async def delete_quote(bot, _id: int=None) -> str:
     quote = get_by_id(_id)
 
     if not quote:
-        return await bot.send("_Got wrong, you socker!_\nThis ID doesn't exist in database!")
+        return await bot.send("_Got wrong, you sucker!_\nYou have no permission to delete!")
 
     try:
         if not remove_quote(_id):
