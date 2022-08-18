@@ -75,10 +75,10 @@ async def by_id(bot, _id: int=None) -> str:
     syntax = "`--qid <quote id>`"
     
     if not _id:
-        return await bot.send(f"_If you don't tell me the ID, how the fuck do you expect me to quote it to you!?_\n(The correct syntax is {syntax}")
+        return await bot.send(f"_If you don't tell me the ID, how the fuck do you expect me to quote it to you!?_\n(The correct syntax is {syntax})")
 
     if not isinstance(_id, int):
-        return await bot.send(f"_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is {syntax}")
+        return await bot.send(f"_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is {syntax})")
 
     quote = get_by_id(_id)
 
@@ -108,10 +108,10 @@ async def delete_quote(bot, _id: int=None) -> str:
             "(You don't have the necessary role for this command)")
     
     if not _id:
-        return await bot.send(f"_If you don't tell me the ID, how the fuck do you expect me to delete it to you!?_\n(The correct syntax is {syntax}")
+        return await bot.send(f"_If you don't tell me the ID, how the fuck do you expect me to delete it to you!?_\n(The correct syntax is {syntax})")
 
     if not isinstance(_id, int):
-        return await bot.send(f"_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is {syntax}")
+        return await bot.send(f"_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is {syntax})")
 
     quote = get_by_id(_id)
     
