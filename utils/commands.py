@@ -19,19 +19,19 @@ async def quote(bot: object, *quote: str) -> str:
     Save a quote into database.
     """
     if not quote:
-        return await bot.send('Insert a message to save.\n_Your dumb ass!_')
+        return await bot.send('You\'re not my mute uncle, tell me something to remember.\n(You have\'nt provided a quote')
 
     quote = ' '.join(quote)
 
     if 'http' in quote and 'discord' in quote and not quote[-4:] == '.png':
-        return await bot.send("- _Don't fuck, dumb ass!_\n"\
-            "- _Hey put a valid image link, bitch!_\n- _Are you an idiot? You mother fucker!_")
+        return await bot.send("- _Check your link, dumbass! You're trying to quote an image from a message, but you're quoting the message itself!_\n"\
+            "(Make sure to copy the link for the image by clicking on it, right-clicking the image and then clicking on \"Save Link\"")
 
     try:
         user = bot.author.name
         set_quote(user, quote)
     except Exception as ex:
-        return await bot.send(f'{ex.args}\n_What that fuck you doing?_')
+        return await bot.send(f'{ex.args}\n_What the fuck are you doing?_')
     else:
         return await bot.send('Done:\n`%s`' % quote)
 
@@ -49,7 +49,7 @@ async def random_quote(bot: object) -> str:
         quote_id_stack.pop(0)
         quotes = get_quotes(quote_id_stack)
     elif not quotes:
-        return await bot.send('Have no one quote saved.\n_Hey jerk, coffee?_')
+        return await bot.send('You\'ve got no quotes saved yet.\n(Save quotes by using `--q <quote`')
 
     chosen_one = choice(quotes)
     quote_id_stack.append(chosen_one.id)
@@ -72,13 +72,18 @@ async def by_id(bot, _id: int=None) -> str:
     """
     Get quote by ID.
     """
-    if not isinstance(_id, int) or not _id:
-        return await bot.send("_Don't fuck, you ass hole_.\nThe ID need to be a interger!")
+    syntax = "`--qid <quote id>`"
+    
+    if not _id:
+        return await bot.send("_If you don't tell me the ID, how the fuck do you expect me to quote it to you!?_\n(The correct syntax is " + syntax )
+
+    if not isinstance(_id, int):
+        return await bot.send("_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is " + syntax)
 
     quote = get_by_id(_id)
 
     if not quote:
-        return await bot.send("_Got wrong, you socker!_\nThis ID doesn't exist in database!")
+        return await bot.send("_Wrong ID, sucker!_\n(There's no such quote with id " + _id)
 
     try:
         # To image links.
@@ -95,23 +100,27 @@ async def delete_quote(bot, _id: int=None) -> str:
     """
     Delete one quote by database ID.
     """
+    syntax = "`--dq <quote id>`"
     roles = [r.name for r in bot.author.roles]
 
     if not 'Operador' in roles:
-        return await bot.send("_Don't fuck, you ass hole_.\n"\
-            "_You have no permission for this command!_")
+        return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
+            "(You don't have the necessary role for this command")
+    
+    if not _id:
+        return await bot.send("_If you don't tell me the ID, how the fuck do you expect me to delete it to you!?_\n(The correct syntax is " + syntax )
 
-    if not isinstance(_id, int) or not _id:
-        return await bot.send("_Don't fuck, you ass hole_.\nThe ID need to be a interger!")
+    if not isinstance(_id, int):
+        return await bot.send("_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is " + syntax)
 
     quote = get_by_id(_id)
 
     if not quote:
-        return await bot.send("_Got wrong, you socker!_\nThis ID doesn't exist in database!")
+        return await bot.send("_Wrong ID, sucker!_\n(There's no such quote with id " + _id)
 
     try:
         if not remove_quote(_id):
-            return await bot.send('_Something wrong happen, dude!_')
+            return await bot.send('_Something wrong happened, dude!_')
         return await bot.send('_Evidence deleted, fella!_')
 
     except Exception as ex:
