@@ -6,7 +6,7 @@ from random import choice
 
 from discord.ext import commands
 
-from utils.database import get_by_id, get_quotes, remove_quote, set_quote
+from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
 
 client = commands.Bot(command_prefix='--')
 logger = logging.getLogger(__name__)
@@ -134,3 +134,18 @@ async def queue_stack(bot: object) -> str:
     """
     return await bot.send('A list of the 5 latest message IDs follows:'\
         f' `{",".join(str(q) for q in quote_id_stack[-5:])}`')
+
+@client.command(aliases=['cq', 'cquotes'])
+async def quote_count(bot: object) -> str:
+    """
+    Outputs a quote count from the database
+    """
+
+    # For len(amount) to work, first it needs to be converted into str
+    amount = count_quotes()
+    amount = str(amount)
+    amount = amount[1:len(amount)][:-2]
+
+    msg = "Quote count: `" + amount + "`"
+
+    return await bot.send(msg)

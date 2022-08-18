@@ -123,3 +123,17 @@ def remove_quote(_id: int) -> bool:
         return True
     except Exception:
         return False
+
+def count_quotes() -> int:
+    """
+    Counts the amount of quotes in the database
+    """
+    _sql = f'''
+        select count(*) from neeble_quotes
+    '''
+
+    with Cursor(MYSQL_CONFIG) as cursor:
+        cursor.execute(_sql)
+        count = cursor.fetchone()
+    
+    return count
