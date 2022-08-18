@@ -16,10 +16,10 @@ quote_id_stack = []
 @client.command(aliases=['q'])
 async def quote(bot: object, *quote: str) -> str:
     """
-    Save a quote into database.
+    Saves a quote into the database.
     """
     if not quote:
-        return await bot.send('You\'re not my mute uncle, tell me something to remember.\n(You have\'nt provided a quote')
+        return await bot.send('You\'re not my mute uncle, tell me something to remember.\n(You haven\'t provided a quote)')
 
     quote = ' '.join(quote)
 
@@ -39,7 +39,7 @@ async def quote(bot: object, *quote: str) -> str:
 @client.command(aliases=['rq'])
 async def random_quote(bot: object) -> str:
     """
-    Get an random quote from database.
+    Get a random quote from the database.
     """
     quotes = get_quotes(quote_id_stack)
     stack_limit = int((len(quotes) * .25))
@@ -49,7 +49,7 @@ async def random_quote(bot: object) -> str:
         quote_id_stack.pop(0)
         quotes = get_quotes(quote_id_stack)
     elif not quotes:
-        return await bot.send('You\'ve got no quotes saved yet.\n(Save quotes by using `--q <quote`')
+        return await bot.send('You\'ve got no quotes saved yet.\n(Save quotes by using `--q <quote`)')
 
     chosen_one = choice(quotes)
     quote_id_stack.append(chosen_one.id)
@@ -70,20 +70,20 @@ async def random_quote(bot: object) -> str:
 @client.command(aliases=['qid'])
 async def by_id(bot, _id: int=None) -> str:
     """
-    Get quote by ID.
+    Gets one quote by ID.
     """
     syntax = "`--qid <quote id>`"
     
     if not _id:
-        return await bot.send("_If you don't tell me the ID, how the fuck do you expect me to quote it to you!?_\n(The correct syntax is " + syntax )
+        return await bot.send("_If you don't tell me the ID, how the fuck do you expect me to quote it to you!?_\n(The correct syntax is " + syntax + ")")
 
     if not isinstance(_id, int):
-        return await bot.send("_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is " + syntax)
+        return await bot.send("_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is " + syntax + ")")
 
     quote = get_by_id(_id)
 
     if not quote:
-        return await bot.send("_Wrong ID, sucker!_\n(There's no such quote with id " + _id)
+        return await bot.send("_Wrong ID, sucker!_\n(There's no such quote with id " + _id + ")")
 
     try:
         # To image links.
@@ -98,7 +98,7 @@ async def by_id(bot, _id: int=None) -> str:
 @client.command(aliases=['dq'])
 async def delete_quote(bot, _id: int=None) -> str:
     """
-    Delete one quote by database ID.
+    Deletes one quote by ID.
     """
     syntax = "`--dq <quote id>`"
     roles = [r.name for r in bot.author.roles]
@@ -108,13 +108,13 @@ async def delete_quote(bot, _id: int=None) -> str:
             "(You don't have the necessary role for this command")
     
     if not _id:
-        return await bot.send("_If you don't tell me the ID, how the fuck do you expect me to delete it to you!?_\n(The correct syntax is " + syntax )
+        return await bot.send("_If you don't tell me the ID, how the fuck do you expect me to delete it to you!?_\n(The correct syntax is " + syntax + ")")
 
     if not isinstance(_id, int):
-        return await bot.send("_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is " + syntax)
+        return await bot.send("_Don't fuck with me, you asshole. The ID needs to be an interger!_\n(The correct syntax is " + syntax + ")")
 
     quote = get_by_id(_id)
-
+    
     if not quote:
         return await bot.send("_Wrong ID, sucker!_\n(There's no such quote with id " + _id)
 
