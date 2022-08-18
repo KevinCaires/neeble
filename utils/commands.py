@@ -42,7 +42,7 @@ async def random_quote(bot: object) -> str:
     Get an random quote from database.
     """
     quotes = get_quotes(quote_id_stack)
-    stack_limit = int((len(quotes) * .5))
+    stack_limit = int((len(quotes) * .25))
     stack_len = len(quote_id_stack)
 
     if not quotes and stack_len > 0:
