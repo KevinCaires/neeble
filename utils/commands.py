@@ -105,7 +105,7 @@ async def delete_quote(bot, _id: int=None) -> str:
 
     if not 'Operador' in roles:
         return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
-            "(You don't have the necessary role for this command")
+            "(You don't have the necessary role for this command)")
     
     if not _id:
         return await bot.send("_If you don't tell me the ID, how the fuck do you expect me to delete it to you!?_\n(The correct syntax is " + syntax + ")")
@@ -147,5 +147,25 @@ async def quote_count(bot: object) -> str:
     amount = amount[1:len(amount)][:-2]
 
     msg = "Quote count: `" + amount + "`"
+
+    return await bot.send(msg)
+
+@client.command(aliases=['v', 'version'])
+async def info(bot: object) -> str:
+    """
+    Displays the bot's information
+    """
+    roles = [r.name for r in bot.author.roles]
+
+    if not 'Operador' in roles:
+        return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
+            "(You don't have the necessary role for this command)")
+    
+    motd = open("./motd", mode='r')
+    text = motd.readlines()
+    fullbanner = ""
+    for lines in text:
+        fullbanner = fullbanner + lines
+    msg = f'''```\n''' + fullbanner + f'''\n```'''
 
     return await bot.send(msg)
