@@ -4,6 +4,8 @@ BOT configuration.
 import logging.config as logger
 import os
 
+from sqlalchemy import create_engine
+
 # Discord token.
 DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
 
@@ -15,6 +17,16 @@ MYSQL_CONFIG = {
     'user': os.environ.get('MYSQL_USER', 'neeble'),
     'password': os.environ.get('MYSQL_PASSWORD', 'neeble'),
 }
+
+SQLACHEMY = create_engine(
+    'mysql://%s:%s@%s:%s/%s' % (
+        os.environ.get('MYSQL_USER', 'neeble'),
+        os.environ.get('MYSQL_PASSWORD', 'neeble'),
+        os.environ.get('MYSQL_HOST', 'localhost'),
+        int(os.environ.get('MYSQL_PORT', '3306')),
+        os.environ.get('MYSQL_DATABASE', 'neeble'),
+    )
+)
 
 # Define the log level
 LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
