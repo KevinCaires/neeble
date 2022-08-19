@@ -58,16 +58,20 @@ def migrate() -> None:
         logger.error(ex.args)
 
 
-def set_quote(user: str, quote: str) -> None:
+def set_quote(user: str, quote: str) -> int:
     """
     Set a quote into database.
     """
+
+    qt = Quotes(quote=quote, user=user,)
+    qtid = 0
     with Session(SQLACHEMY) as session:
-        session.add(Quotes(
-            quote=quote,
-            user=user,
-        ))
+        session.add(qt)
+        session.flush()
+        session.refresh(qt)
+        qtid = qt.id
         session.commit()
+    return qtid
 
 
 def get_quotes(ids: list) -> tuple:

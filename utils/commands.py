@@ -29,13 +29,13 @@ async def quote(bot: object, *quote: str) -> str:
 
     try:
         user = bot.author.name
-        set_quote(user, quote)
+        qtid = set_quote(user, quote)
     except Exception as ex:
         if ex.args[0].find("Duplicate") != -1:
             return await bot.send("There's already a quote from that same person, with that exact match!")
         return await bot.send(f'{ex.args}\n_What the fuck are you doing?_')
     else:
-        return await bot.send('Done:\n`%s`' % quote)
+        return await bot.send("Done: `" + quote + "` ID: `" + str(qtid) + "`")
 
 
 @client.command(aliases=['rq'])
