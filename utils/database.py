@@ -6,7 +6,6 @@ import logging
 import MySQLdb
 from models.quotes import Quotes
 from settings.config import MYSQL_CONFIG, SQLACHEMY
-from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -77,8 +76,8 @@ def get_quotes(ids: list) -> tuple:
     ids: List of quote ID's
     """
     with Session(SQLACHEMY) as session:
-        _sql = select(Quotes).where(Quotes.id.not_in(ids))
-        return [item for item in session.scalars(_sql)]
+        response = session.query(Quotes).filter(Quotes.id.not_in(ids))
+        return [item for item in response]
 
 
 def get_by_id(id: int) -> object:
