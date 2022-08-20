@@ -198,7 +198,8 @@ async def weather(bot: object, *location: str) -> str:
         separated[0] = separated[0][1:len(separated[0])]  # These two commands clean up input for the parser
         
         if len(separated) > 3:
-            return await bot.send("This command takes 3 parameters at most!")
+            return await bot.send("This command takes 3 parameters at most!\n \
+            (Syntax: `--w <city>, <state>, <ISO 3166 country code>`)")
         if len(separated) == 1:
             city = separated[0]
             state = ""
