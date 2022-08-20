@@ -1,4 +1,5 @@
-discord.py==1.7.3
-mysqlclient==2.1.1
-SQLAlchemy==1.4.40
-pyre2==0.3.6
+Cython
+discord.py
+mysqlclient
+SQLAlchemy
+pyre2
