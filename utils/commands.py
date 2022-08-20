@@ -10,7 +10,7 @@ from discord.ext import commands
 from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
 from utils.weather import geocode, getweatherdata, displayweather
 
-from settings.config import PERMISSIONS
+from settings.config import PERMISSIONS, OW_API_CONFIG
 
 client = commands.Bot(command_prefix='--')
 logger = logging.getLogger(__name__)
@@ -187,6 +187,9 @@ async def weather(bot: object, *location: str) -> str:
     """
     Displays the weather information for a given place
     """
+    if OW_API_CONFIG['api_id'] == 'no':
+        return await bot.send("You haven't set up an API key! Make an user and set up an API key in https://openweathermap.org/\n \
+        (The weather command hansn't been set up properly, make sure you have `OPENWEATHER_API_TOKEN` set up")
     if location:
         location = str(location)
         stripped = re2.sub(" ", "", location) # Strips all whitespace
