@@ -3,10 +3,15 @@ Bot commands.
 """
 import logging
 from random import choice
+import re2
 
 from discord.ext import commands
 from settings.config import IMAGE_TYPES, PERMISSIONS
 
+from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
+from utils.weather import geocode, getweatherdata, displayweather
+
+from settings.config import PERMISSIONS, OW_API_CONFIG
 from utils.database import (count_quotes, get_by_id, get_quote_contains,
                             get_quotes, remove_quote, set_quote)
 
@@ -145,8 +150,7 @@ async def queue_stack(bot: object) -> str:
     return await bot.send('A list of the 5 latest message IDs follows:'\
         f' `{",".join(str(q) for q in quote_id_stack[-5:])}`')
 
-
-@client.command(aliases=['cq', 'cquotes'])
+@client.command(aliases=['qc', 'cquotes'])
 async def quote_count(bot: object) -> str:
     """
     Outputs a quote count from the database
@@ -178,8 +182,48 @@ async def info(bot: object) -> str:
 
     for lines in text:
         fullbanner = fullbanner + lines
-
     msg = f'''```\n{fullbanner}\n```'''
+
+    return await bot.send(msg)
+
+@client.command(aliases=['w'])
+async def weather(bot: object, *location: str) -> str:
+    """
+    Displays the weather information for a given place
+    """
+    if OW_API_CONFIG['api_id'] == 'no':
+        return await bot.send("You haven't set up an API key! Make an user and set up an API key in https://openweathermap.org/\n \
+        (The weather command hansn't been set up properly, make sure you have `OPENWEATHER_API_TOKEN` set up")
+    if location:
+        location = str(location)
+        stripped = re2.sub(" ", "", location) # Strips all whitespace
+        separated = stripped.split(',') # Splits between commas
+        separated.pop(-1)
+        separated[0] = separated[0][1:len(separated[0])]  # These two commands clean up input for the parser
+        
+        if len(separated) > 3:
+            return await bot.send("This command takes 3 parameters at most!\n \
+            (Syntax: `--w <city>, <state>, <ISO 3166 country code>`)")
+        if len(separated) == 1:
+            city = separated[0]
+            state = ""
+            country = ""
+        elif len(separated) == 2:
+            city = separated[0]
+            state = separated[1]
+            country = ""
+        else:
+            city = separated[0]
+            state = separated[1]
+            country = separated[2]        
+    else:
+        city = ""
+        state = ""
+        country = ""
+    
+    lat, lon = geocode(city, state, country)
+    weatherdata = getweatherdata(lat, lon)
+    msg = displayweather(weatherdata)
 
     return await bot.send(msg)
 

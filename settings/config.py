@@ -80,6 +80,14 @@ PERMISSIONS = {
     'v' : ['Operador', 'BotMan']
 }
 
+OW_API_CONFIG = {
+    'api_id' : os.environ.get('OPENWEATHER_API_TOKEN', 'no'),
+    'gc_url' : 'http://api.openweathermap.org/geo/1.0/direct?q=<CITY>,<STATE>,<COUNTRY>&limit=1&appid=<API_ID>',
+    'wh_url' : 'https://api.openweathermap.org/data/2.5/weather?lat=<LAT>&lon=<LON>&units=metric&appid=<API_ID>'
+}
+
+logger.dictConfig(LOGGING_CONFIG)
+
 # Tuple of image type on image links.
 # e.g: https://cdn.discordapp.com/attachments/720808802340962357/988542480981061702/cat.jpeg
 # e.g: https://cdn.discordapp.com/attachments/720808802340962357/988542480981061702/unknow.png
