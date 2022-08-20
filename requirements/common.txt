@@ -1,5 +1,3 @@
-Cython
 discord.py
 mysqlclient
 SQLAlchemy
-pyre2

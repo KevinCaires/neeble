@@ -3,9 +3,9 @@ Bot commands.
 """
 import logging
 from random import choice
-import re2
 
 from discord.ext import commands
+from discord import Intents
 from settings.config import IMAGE_TYPES, PERMISSIONS
 
 from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
@@ -15,7 +15,7 @@ from settings.config import PERMISSIONS, OW_API_CONFIG
 from utils.database import (count_quotes, get_by_id, get_quote_contains,
                             get_quotes, remove_quote, set_quote)
 
-client = commands.Bot(command_prefix='--')
+client = commands.Bot(command_prefix='--', intents=Intents.all())
 logger = logging.getLogger(__name__)
 
 quote_id_stack = []
@@ -196,7 +196,7 @@ async def weather(bot: object, *location: str) -> str:
         (The weather command hansn't been set up properly, make sure you have `OPENWEATHER_API_TOKEN` set up")
     if location:
         location = str(location)
-        stripped = re2.sub(" ", "", location) # Strips all whitespace
+        stripped = location.replace(" ", "") # Strips all whitespace
         separated = stripped.split(',') # Splits between commas
         separated.pop(-1)
         separated[0] = separated[0][1:len(separated[0])]  # These two commands clean up input for the parser

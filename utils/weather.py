@@ -4,7 +4,6 @@ from settings.config import OW_API_CONFIG
 
 import urllib.request
 import json
-import re2
 
 def geocode(city = 'curitiba', state = 'parana', country = 'BR') -> str:
     """
@@ -15,10 +14,10 @@ def geocode(city = 'curitiba', state = 'parana', country = 'BR') -> str:
         state = 'parana'
         country = 'BR'
     ow_gc_url = OW_API_CONFIG['gc_url']
-    ow_gc_url = re2.sub('<CITY>', city, ow_gc_url)
-    ow_gc_url = re2.sub('<STATE>', state, ow_gc_url)
-    ow_gc_url = re2.sub('<COUNTRY', country, ow_gc_url)
-    ow_gc_url = re2.sub('<API_ID>', OW_API_CONFIG['api_id'], ow_gc_url)
+    ow_gc_url = ow_gc_url.replace('<CITY>', city)
+    ow_gc_url = ow_gc_url.replace('<STATE>', state)
+    ow_gc_url = ow_gc_url.replace('<COUNTRY', country)
+    ow_gc_url = ow_gc_url.replace('<API_ID>', OW_API_CONFIG['api_id'])
 
     placedata = urllib.request.urlopen(ow_gc_url)
     placedata = placedata.read().decode()
@@ -31,9 +30,9 @@ def getweatherdata(lat, lon):
     Gets weather data based on coordinates
     """
     ow_wh_url = OW_API_CONFIG['wh_url']
-    ow_wh_url = re2.sub('<LAT>', lat, ow_wh_url)
-    ow_wh_url = re2.sub('<LON>', lon, ow_wh_url)
-    ow_wh_url = re2.sub('<API_ID>', OW_API_CONFIG['api_id'], ow_wh_url)
+    ow_wh_url = ow_wh_url.replace('<LAT>', lat)
+    ow_wh_url = ow_wh_url.replace('<LON>', lon)
+    ow_wh_url = ow_wh_url.replace('<API_ID>', OW_API_CONFIG['api_id'])
 
     weatherdata = urllib.request.urlopen(ow_wh_url)
     weatherdata = weatherdata.read().decode()
