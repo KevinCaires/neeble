@@ -114,3 +114,12 @@ def count_quotes() -> int:
     with Session(SQLACHEMY) as session:
         response = session.query(Quotes.id).count()
     return response
+
+
+def get_quote_contains(part: str) -> tuple:
+    """
+    Get quotes by part of message.
+    """
+    with Session(SQLACHEMY) as session:
+        response = session.query(Quotes).filter(Quotes.quote.contains(part))
+    return (r for r in response)

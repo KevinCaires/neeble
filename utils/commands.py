@@ -7,8 +7,8 @@ from random import choice
 from discord.ext import commands
 from settings.config import IMAGE_TYPES, PERMISSIONS
 
-from utils.database import (count_quotes, get_by_id, get_quotes, remove_quote,
-                            set_quote)
+from utils.database import (count_quotes, get_by_id, get_quote_contains,
+                            get_quotes, remove_quote, set_quote)
 
 client = commands.Bot(command_prefix='--')
 logger = logging.getLogger(__name__)
@@ -182,3 +182,26 @@ async def info(bot: object) -> str:
     msg = f'''```\n{fullbanner}\n```'''
 
     return await bot.send(msg)
+
+
+@client.command(aliases=['qcontains', 'qsearch'])
+async def quote_contains(bot: object, part: str) -> str:
+    """
+    Filter quote by part of saved message.
+    """
+    syntax = '--qcontains <part>'
+
+    if not part:
+        return await bot.send("_If you don't tell me the part, how the fuck do you expect me to "\
+            f"find it to you!?_\n(The correct syntax is {syntax})")
+
+    quotes = get_quote_contains(part)
+
+    if not quotes:
+        return await bot.send(f"_Wrong text, sucker!_\n(There's no such quote with text `{part}`)")
+
+    for quote in quotes:
+        await bot.send(f'```\nID: {quote.id}\nMessage: {quote.quote[:10]} ... '\
+            f'{quote.quote[-10:]}\nUser: {quote.user}\n```')
+
+    return
