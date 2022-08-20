@@ -4,32 +4,29 @@
 
 ---
 
-### Dependences
+### Dependencies
 
-- Python 3.8
-- gcc
-- python3-dev
-- libmysqlclient-dev or similar
+- `Python>=3.8`
+- `gcc` or your compiler of choice
+- `python3-dev`
+- Your distro's mysql library (`libmysqlclient-dev` in Ubuntu)
 
-Or docker and docker-compose to run into container.
+You can also run neeble under [docker](https://www.docker.com/) with [docker-compose](https://docs.docker.com/compose/)
 
 ---
 
-### How run
+### How to run
 
-- You need mysql instance running in your pc.
-- Into mysql instance create a db named `neeble`.
-- Copy file environment/template and rename then.
-- Fill environment variables into a new file.
-- Load environment varriables with source command
-> $ source environment/myenvfile
+- Make sure you are running a SQL server instance
+- Create a database named `neeble`
+- Set up your environment variables with `environment/template` (You may copy the template into a new file)
+- Load environment variables with `source`:  
+`$ source environment/template`
 
-##### Python local run
-- Execute `migrate` command to create necessary tables.
-> $ python manage.py migrate
-- Excecute `run` command.
-> $ python manage.py run
+##### Run it locally using python
+The `Makefile` provided will do all necessary migrations and start the bot:  
+`$ make production`
 
-##### Docker run
-- Execute the command:
-> $ docker-compose up -d --build
+##### Run it under python
+Build and start the container with `docker-compose`:  
+`$ docker-compose up -d --build`
