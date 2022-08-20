@@ -68,7 +68,7 @@ LOGGING_CONFIG = {
         },
     },
 }
-
+logger.dictConfig(LOGGING_CONFIG)
 
 ## INSTRUCTIONS ON SETTING UP PERMISSIONS:
 # Permissions are now granular, more than one distinct role
@@ -80,4 +80,7 @@ PERMISSIONS = {
     'v' : ['Operador', 'BotMan']
 }
 
-logger.dictConfig(LOGGING_CONFIG)
+# Tuple of image type on image links.
+# e.g: https://cdn.discordapp.com/attachments/720808802340962357/988542480981061702/cat.jpeg
+# e.g: https://cdn.discordapp.com/attachments/720808802340962357/988542480981061702/unknow.png
+IMAGE_TYPES = ('jpeg','jpg','png')
