@@ -1,6 +1,6 @@
 # Neeble bot
 
-<img src="https://c.tenor.com/1HAl-cmOzswAAAAd/worms-meninblack.gif">
+<img src="https://c.tenor.com/1HAl-cmOzswAAAAd/worms-meninblack.gif" align="center">
 
 ---
 
