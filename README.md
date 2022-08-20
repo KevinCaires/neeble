@@ -30,3 +30,12 @@ The `Makefile` provided will do all necessary migrations and start the bot:
 ##### Run it under python
 Build and start the container with `docker-compose`:  
 `$ docker-compose up -d --build`
+
+
+### FAQ
+
+**Q: Quoting emojis doesn't work!**  
+A: Make sure, in the database neeble is using, that the columns `quote` and `user` in the table `neeble_quotes` uses collation `utf8mb4_general_ci`.  
+
+**Q: Logs talk about "unauthorized intents", what's all this about?**  
+A: Make sure your bot has all gateway intents enabled in the discord developer console.
