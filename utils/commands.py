@@ -106,8 +106,12 @@ async def delete_quote(bot, _id: int=None) -> str:
     """
     syntax = "`--dq <quote id>`"
     roles = [r.name for r in bot.author.roles]
+    PermStatus = False
+    
+    if len(PERMISSIONS['dq']) < 1 or not len(set(PERMISSIONS['dq']).intersection(roles)) < 1:
+        PermStatus = True
 
-    if len(set(PERMISSIONS['dq']).intersection(roles)) < 1:
+    if not PermStatus:
         return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
             "(You don't have the necessary role for this command)")
     
@@ -158,8 +162,12 @@ async def info(bot: object) -> str:
     Displays the bot's information
     """
     roles = [r.name for r in bot.author.roles]
+    PermStatus = False
 
-    if len(set(PERMISSIONS['v']).intersection(roles)) < 1:
+    if len(PERMISSIONS['v']) < 1 or not len(set(PERMISSIONS['v']).intersection(roles)) < 1:
+        PermStatus = True
+
+    if not PermStatus:
         return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
             "(You don't have the necessary role for this command)")
     
