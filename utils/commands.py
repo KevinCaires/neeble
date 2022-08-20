@@ -143,7 +143,7 @@ async def queue_stack(bot: object) -> str:
     return await bot.send('A list of the 5 latest message IDs follows:'\
         f' `{",".join(str(q) for q in quote_id_stack[-5:])}`')
 
-@client.command(aliases=['cq', 'cquotes'])
+@client.command(aliases=['qc', 'cquotes'])
 async def quote_count(bot: object) -> str:
     """
     Outputs a quote count from the database
