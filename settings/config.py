@@ -69,4 +69,15 @@ LOGGING_CONFIG = {
     },
 }
 
+
+## INSTRUCTIONS ON SETTING UP PERMISSIONS:
+# Permissions are now granular, more than one distinct role
+# can execute the commands, whatever roles are inside the
+# comma-separated lists can execute their respective commands
+# Commands with empty lists will grant execution privileges to everyone
+PERMISSIONS = {
+    'dq' : ['BotMan'],
+    'v' : ['Operador', 'BotMan']
+}
+
 logger.dictConfig(LOGGING_CONFIG)
