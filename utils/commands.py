@@ -148,7 +148,7 @@ async def quote_count(bot: object) -> str:
     """
     Outputs a quote count from the database
     """
-    # For len(amount) to work, first it needs to be converted into str
+    
     amount = count_quotes()
     amount = str(amount)
 
