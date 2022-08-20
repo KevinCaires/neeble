@@ -8,6 +8,8 @@ from discord.ext import commands
 
 from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
 
+from settings.config import PERMISSIONS
+
 client = commands.Bot(command_prefix='--')
 logger = logging.getLogger(__name__)
 
@@ -105,7 +107,7 @@ async def delete_quote(bot, _id: int=None) -> str:
     syntax = "`--dq <quote id>`"
     roles = [r.name for r in bot.author.roles]
 
-    if not 'Operador' in roles:
+    if len(set(PERMISSIONS['dq']).intersection(roles)) < 1:
         return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
             "(You don't have the necessary role for this command)")
     
@@ -157,7 +159,7 @@ async def info(bot: object) -> str:
     """
     roles = [r.name for r in bot.author.roles]
 
-    if not 'Operador' in roles:
+    if len(set(PERMISSIONS['v']).intersection(roles)) < 1:
         return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
             "(You don't have the necessary role for this command)")
     

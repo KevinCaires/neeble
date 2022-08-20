@@ -69,4 +69,9 @@ LOGGING_CONFIG = {
     },
 }
 
+PERMISSIONS = {
+    'dq' : ['O emissário', 'BotMan'],
+    'v' : ['Operador']
+}
+
 logger.dictConfig(LOGGING_CONFIG)
