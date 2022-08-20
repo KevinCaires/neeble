@@ -1,3 +1,5 @@
 discord.py
 mysqlclient
 SQLAlchemy
+json
+pyre2

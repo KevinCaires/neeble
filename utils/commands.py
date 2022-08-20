@@ -3,10 +3,12 @@ Bot commands.
 """
 import logging
 from random import choice
+import re2
 
 from discord.ext import commands
 
 from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
+from utils.weather import geocode, getweatherdata, displayweather
 
 from settings.config import PERMISSIONS
 
@@ -179,3 +181,41 @@ async def info(bot: object) -> str:
     msg = f'''```\n''' + fullbanner + f'''\n```'''
 
     return await bot.send(msg)
+
+@client.command(aliases=['w'])
+async def weather(bot: object, *location: str) -> str:
+    """
+    Displays the weather information for a given place
+    """
+    if location:
+        location = str(location)
+        stripped = re2.sub(" ", "", location) # Strips all whitespace
+        separated = stripped.split(',') # Splits between commas
+        separated.pop(-1)
+        separated[0] = separated[0][1:len(separated[0])]  # These two commands clean up input for the parser
+        
+        if len(separated) > 3:
+            return await bot.send("This command takes 3 parameters at most!")
+        if len(separated) == 1:
+            city = separated[0]
+            state = ""
+            country = ""
+        elif len(separated) == 2:
+            city = separated[0]
+            state = separated[1]
+            country = ""
+        else:
+            city = separated[0]
+            state = separated[1]
+            country = separated[2]        
+    else:
+        city = ""
+        state = ""
+        country = ""
+    
+    lat, lon = geocode(city, state, country)
+    weatherdata = getweatherdata(lat, lon)
+    msg = displayweather(weatherdata)
+
+    return await bot.send(msg)
+    
