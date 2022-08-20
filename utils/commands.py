@@ -85,7 +85,7 @@ async def by_id(bot, _id: int=None) -> str:
     quote = get_by_id(_id)
 
     if not quote:
-        return await bot.send(f"_Wrong ID, sucker!_\n(There's no such quote with id {_id}")
+        return await bot.send(f"_Wrong ID, sucker!_\n(There's no such quote with id {_id})")
 
     try:
         # To image links.
@@ -118,7 +118,7 @@ async def delete_quote(bot, _id: int=None) -> str:
     quote = get_by_id(_id)
     
     if not quote:
-        return await bot.send(f"_Wrong ID, sucker!_\n(There's no such quote with id {_id}")
+        return await bot.send(f"_Wrong ID, sucker!_\n(There's no such quote with id {_id})")
 
     try:
         if not remove_quote(_id):
