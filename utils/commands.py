@@ -226,7 +226,7 @@ async def weather(bot: object, *location: str) -> str:
     weatherdata = getweatherdata(lat, lon)
     msg = displayweather(weatherdata)
     default_msg = 'No data!'
-    embed = Embed(collor=0x623CA6, type='rich')
+    embed = Embed(type='rich')
     embed.add_field(
         name='City',
         value=msg.name,
