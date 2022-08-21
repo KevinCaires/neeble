@@ -5,7 +5,7 @@ import logging
 from random import choice
 
 from discord.ext import commands
-from discord import Intents
+from discord import Intents, Embed
 from settings.config import IMAGE_TYPES, PERMISSIONS
 
 from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
@@ -186,6 +186,7 @@ async def info(bot: object) -> str:
 
     return await bot.send(msg)
 
+
 @client.command(aliases=['w'])
 async def weather(bot: object, *location: str) -> str:
     """
@@ -224,8 +225,42 @@ async def weather(bot: object, *location: str) -> str:
     lat, lon = geocode(city, state, country)
     weatherdata = getweatherdata(lat, lon)
     msg = displayweather(weatherdata)
+    default_msg = 'No data!'
+    embed = Embed(collor=0x623CA6, type='rich')
+    embed.add_field(
+        name='City',
+        value=msg.name,
+    )
+    embed.add_field(
+        name='Description',
+        value=msg.description if msg.description else default_msg,
+    )
+    embed.add_field(
+        name='Temperature ºC',
+        value=msg.temp if msg.temp else default_msg,
+    )
+    embed.add_field(
+        name='Feels like ºC',
+        value=msg.feels_like if msg.feels_like else default_msg,
+    )
+    embed.add_field(
+        name='Humidity %',
+        value=msg.humidity if msg.humidity else default_msg,
+    )
+    embed.add_field(
+        name='Cloud coverage %',
+        value=msg.cloud_coverage if msg.cloud_coverage else default_msg,
+    )
+    embed.add_field(
+        name='Wind gusts m/s',
+        value=msg.wind_gusts if msg.wind_gusts else default_msg,
+    )
+    embed.add_field(
+        name='Wind speed m/s',
+        value=msg.wind_speed if msg.wind_speed else default_msg,
+    )
 
-    return await bot.send(msg)
+    return await bot.send('**`Weather`**', embed=embed)
 
 
 @client.command(aliases=['qcontains', 'qsearch'])
