@@ -4,16 +4,15 @@ Bot commands.
 import logging
 from random import choice
 
+from discord import Embed, Intents
 from discord.ext import commands
-from discord import Intents, Embed
-from settings.config import IMAGE_TYPES, PERMISSIONS
+from settings.config import IMAGE_TYPES, OW_API_CONFIG, PERMISSIONS
 
-from utils.database import get_by_id, get_quotes, remove_quote, set_quote, count_quotes
-from utils.weather import geocode, getweatherdata, displayweather
-
-from settings.config import PERMISSIONS, OW_API_CONFIG
 from utils.database import (count_quotes, get_by_id, get_quote_contains,
                             get_quotes, remove_quote, set_quote)
+from utils.machine_monitor import Monitor
+from utils.tools import kbytes_to_gbytes
+from utils.weather import displayweather, geocode, getweatherdata
 
 client = commands.Bot(command_prefix='--', intents=Intents.all())
 logger = logging.getLogger(__name__)
@@ -284,3 +283,44 @@ async def quote_contains(bot: object, part: str) -> str:
             f'{quote.quote[-10:]}\nUser: {quote.user}\n```')
 
     return
+
+
+@client.command(aliases=['macinfo', 'minfo'])
+async def machine_info(bot: object, *args: str) -> str:
+    """
+    Return machine information.
+    """
+    embed = Embed(type='rich')
+    supported_args = [
+        'network'
+    ]
+
+    if not args:
+        embed.add_field(name='CPU', value=f'{Monitor.cpu_percent} %')
+        embed.add_field(name='RAM', value=f'{Monitor.memory.percent} %')
+        embed.add_field(name='Swap', value=f'{Monitor.swap.percent} %')
+        embed.add_field(name='Disk total', value=f'{kbytes_to_gbytes(Monitor.disk_usage.total)} Gb')
+        embed.add_field(name='Disk used', value=f'{kbytes_to_gbytes(Monitor.disk_usage.used)} Gb')
+        embed.add_field(name='Disk free', value=f'{kbytes_to_gbytes(Monitor.disk_usage.free)} Gb')
+
+    if args[0] not in supported_args:
+        return await bot.send('The argument is not supported!')
+
+    if args[0] == 'network':
+        ios = Monitor.net_io_counters
+
+        for io in ios:
+            embed.clear_fields()
+            embed.add_field(name='Bytes received', value=ios[io].bytes_recv, inline=True)
+            embed.add_field(name='Bytes sent', value=ios[io].bytes_sent, inline=True)
+            embed.add_field(name='Packets received', value=ios[io].packets_recv, inline=True)
+            embed.add_field(name='Packets sent', value=ios[io].packets_sent, inline=True)
+            embed.add_field(name='Drop in', value=ios[io].dropin, inline=True)
+            embed.add_field(name='Drop out', value=ios[io].dropout, inline=True)
+            embed.add_field(name='Error in', value=ios[io].errin, inline=True)
+            embed.add_field(name='Error out', value=ios[io].errout, inline=True)
+            await bot.send(f'**`{io}`**', embed=embed)
+
+        return
+
+    return await bot.send('**`Monitor`**', embed=embed)
