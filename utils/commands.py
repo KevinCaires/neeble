@@ -236,28 +236,28 @@ async def weather(bot: object, *location: str) -> str:
         value=msg.description if msg.description else default_msg,
     )
     embed.add_field(
-        name='Temperature ºC',
-        value=msg.temp if msg.temp else default_msg,
+        name='Temperature',
+        value=f'{msg.temp} ºC' if msg.temp else default_msg,
     )
     embed.add_field(
-        name='Feels like ºC',
-        value=msg.feels_like if msg.feels_like else default_msg,
+        name='Feels like',
+        value=f'{msg.feels_like} ºC' if msg.feels_like else default_msg,
     )
     embed.add_field(
-        name='Humidity %',
-        value=msg.humidity if msg.humidity else default_msg,
+        name='Humidity',
+        value=f'{msg.humidity} %' if msg.humidity else default_msg,
     )
     embed.add_field(
-        name='Cloud coverage %',
-        value=msg.cloud_coverage if msg.cloud_coverage else default_msg,
+        name='Cloud coverage',
+        value=f'{msg.cloud_coverage} %' if msg.cloud_coverage else default_msg,
     )
     embed.add_field(
-        name='Wind gusts m/s',
-        value=msg.wind_gusts if msg.wind_gusts else default_msg,
+        name='Wind gusts',
+        value=f'{msg.wind_gusts} m/s' if msg.wind_gusts else default_msg,
     )
     embed.add_field(
-        name='Wind speed m/s',
-        value=msg.wind_speed if msg.wind_speed else default_msg,
+        name='Wind speed',
+        value=f'{msg.wind_speed} m/s' if msg.wind_speed else default_msg,
     )
 
     return await bot.send('**`Weather`**', embed=embed)
