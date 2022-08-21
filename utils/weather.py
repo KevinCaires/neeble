@@ -1,9 +1,10 @@
+import json
 import logging
+import urllib.request
+from collections import namedtuple
 
 from settings.config import OW_API_CONFIG
 
-import urllib.request
-import json
 
 def geocode(city = 'curitiba', state = 'parana', country = 'BR') -> str:
     """
@@ -40,58 +41,64 @@ def getweatherdata(lat, lon):
 
     return weatherdata
 
-def displayweather(wdata):
+def displayweather(wdata) -> object:
     """
     "Prettifies" the output for discord
     """
     try:
-        wdata['weather'][0]['description']
         description = wdata['weather'][0]['description']
     except:
-        description = "No data on description"
+        description = None
+
     try:
-        wdata['main']['temp']
-        temp = wdata['main']['temp']
-        tempmsg = f"Temperature is {temp}ºC"
+        tempmsg = wdata['main']['temp']
     except:
-        tempmsg = "No data on temperature"
+        tempmsg = None
+
     try:
-        wdata['main']['feels_like']
-        feels_like = wdata['main']['feels_like']
-        feels_likemsg = f"Feels like {feels_like}ºC"
+        feels_likemsg = wdata['main']['feels_like']
     except:
-        feels_likemsg = "No data on perceived temperature"
+        feels_likemsg = None
+
     try:
-        wdata['main']['humidity']
-        humidity = wdata['main']['humidity']
-        humiditymsg = f"Humidity is {humidity}%"
+        humiditymsg = wdata['main']['humidity']
     except:
-        humiditymsg = "No data on humidity"
+        humiditymsg = None
+
     try:
-        wdata['wind']['speed']
-        wind_speed = wdata['wind']['speed']
-        wind_speedmsg = f"Wind speed is {wind_speed}m/s"
+        wind_speedmsg = wdata['wind']['speed']
     except:
-        wind_speedmsg = "No data on wind speed"
+        wind_speedmsg = None
+
     try:
-        wdata['wind']['gust']
-        wind_gusts = wdata['wind']['gust']
-        wind_gustsmsg = f"with gusts of {wind_gusts}m/s"
+        wind_gustsmsg = wdata['wind']['gust']
     except:
-        wind_gustsmsg = "with no data on gusts"
+        wind_gustsmsg =  None
     try:
-        wdata['clouds']['all']
-        cloud_coverage = wdata['clouds']['all']
-        cloud_coveragemsg = f"Cloud coverage is {cloud_coverage}%"
+        cloud_coveragemsg = wdata['clouds']['all']
     except:
-        cloud_coveragemsg = "No data on cloud coverage"
+        cloud_coveragemsg = None
+
     name = wdata['name']
+    obj = namedtuple('Weather', [
+        'name',
+        'description',
+        'temp',
+        'feels_like',
+        'humidity',
+        'wind_speed',
+        'wind_gusts',
+        'cloud_coverage',
+    ])
+    weather = obj(*(
+        name,
+        description,
+        tempmsg,
+        feels_likemsg,
+        humiditymsg,
+        wind_speedmsg,
+        wind_gustsmsg,
+        cloud_coveragemsg
+    ))
 
-    msg = f"""
-    ```
-    Weather for {name}:
-    {description}, {tempmsg}. {feels_likemsg}. {humiditymsg}.
-    {wind_speedmsg}, {wind_gustsmsg}. {cloud_coveragemsg}.
-    ```"""
-
-    return msg
+    return weather
