@@ -294,6 +294,11 @@ async def machine_info(bot: object, *args: str) -> str:
     supported_args = [
         'network'
     ]
+    roles = [r.name for r in bot.author.roles]
+
+    if 'BotMan' not in roles:
+        return await bot.send("_And who the fuck do **YOU** think you are!?_.\n"\
+            "(You don't have the necessary role for this command)")
 
     if not args:
         embed.add_field(name='CPU', value=f'{Monitor.cpu_percent} %')
@@ -302,6 +307,7 @@ async def machine_info(bot: object, *args: str) -> str:
         embed.add_field(name='Disk total', value=f'{kbytes_to_gbytes(Monitor.disk_usage.total)} Gb')
         embed.add_field(name='Disk used', value=f'{kbytes_to_gbytes(Monitor.disk_usage.used)} Gb')
         embed.add_field(name='Disk free', value=f'{kbytes_to_gbytes(Monitor.disk_usage.free)} Gb')
+        return await bot.send('**`Monitor`**', embed=embed)
 
     if args[0] not in supported_args:
         return await bot.send('The argument is not supported!')
@@ -322,5 +328,3 @@ async def machine_info(bot: object, *args: str) -> str:
             await bot.send(f'**`{io}`**', embed=embed)
 
         return
-
-    return await bot.send('**`Monitor`**', embed=embed)
