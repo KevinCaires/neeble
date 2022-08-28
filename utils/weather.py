@@ -1,43 +1,22 @@
 import json
 import logging
-import urllib.request
+import requests
 from collections import namedtuple
 
 from settings.config import OW_API_CONFIG
 
-
-def geocode(city = 'curitiba', state = 'parana', country = 'BR') -> str:
-    """
-    Converts city, state and country parameters into their coordinates
-    """    
-    if city == "" and state == "" and country == "":
-        city = 'curitiba'
-        state = 'parana'
-        country = 'BR'
-    ow_gc_url = OW_API_CONFIG['gc_url']
-    ow_gc_url = ow_gc_url.replace('<CITY>', city)
-    ow_gc_url = ow_gc_url.replace('<STATE>', state)
-    ow_gc_url = ow_gc_url.replace('<COUNTRY', country)
-    ow_gc_url = ow_gc_url.replace('<API_ID>', OW_API_CONFIG['api_id'])
-
-    placedata = urllib.request.urlopen(ow_gc_url)
-    placedata = placedata.read().decode()
-    placedata = json.loads(str(placedata))
-
-    return str(placedata[0]['lat']), str(placedata[0]['lon'])
-
-def getweatherdata(lat, lon):
+def getweatherdata(city:str):
     """
     Gets weather data based on coordinates
     """
-    ow_wh_url = OW_API_CONFIG['wh_url']
-    ow_wh_url = ow_wh_url.replace('<LAT>', lat)
-    ow_wh_url = ow_wh_url.replace('<LON>', lon)
+    ow_wh_url = OW_API_CONFIG['wh_url'].encode('utf-8').decode('utf-8')
+    ow_wh_url = ow_wh_url.replace('<CITY>', city)
     ow_wh_url = ow_wh_url.replace('<API_ID>', OW_API_CONFIG['api_id'])
+    ow_wh_url = ow_wh_url.encode('utf-8').decode('utf-8')
 
-    weatherdata = urllib.request.urlopen(ow_wh_url)
-    weatherdata = weatherdata.read().decode()
-    weatherdata = json.loads(str(weatherdata))
+    weatherdata = requests.get(ow_wh_url).text
+    weatherdata = weatherdata.encode('utf-8').decode('utf-8')
+    weatherdata = json.loads(weatherdata)
 
     return weatherdata
 

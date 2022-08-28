@@ -82,8 +82,7 @@ PERMISSIONS = {
 
 OW_API_CONFIG = {
     'api_id' : os.environ.get('OPENWEATHER_API_TOKEN', 'no'),
-    'gc_url' : 'http://api.openweathermap.org/geo/1.0/direct?q=<CITY>,<STATE>,<COUNTRY>&limit=1&appid=<API_ID>',
-    'wh_url' : 'https://api.openweathermap.org/data/2.5/weather?lat=<LAT>&lon=<LON>&units=metric&appid=<API_ID>'
+    'wh_url' : 'https://api.openweathermap.org/data/2.5/weather?q=<CITY>&units=metric&appid=<API_ID>'
 }
 
 logger.dictConfig(LOGGING_CONFIG)

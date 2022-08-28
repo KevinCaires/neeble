@@ -12,7 +12,7 @@ from utils.database import (count_quotes, get_by_id, get_quote_contains,
                             get_quotes, remove_quote, set_quote)
 from utils.machine_monitor import Monitor
 from utils.tools import kbytes_to_gbytes
-from utils.weather import displayweather, geocode, getweatherdata
+from utils.weather import displayweather, getweatherdata
 
 client = commands.Bot(command_prefix='--', intents=Intents.all())
 logger = logging.getLogger(__name__)
@@ -191,38 +191,18 @@ async def weather(bot: object, *location: str) -> str:
     """
     Displays the weather information for a given place
     """
+    
     if OW_API_CONFIG['api_id'] == 'no':
         return await bot.send("You haven't set up an API key! Make an user and set up an API key in https://openweathermap.org/\n \
         (The weather command hansn't been set up properly, make sure you have `OPENWEATHER_API_TOKEN` set up")
     if location:
-        location = str(location)
-        stripped = location.replace(" ", "") # Strips all whitespace
-        separated = stripped.split(',') # Splits between commas
-        separated.pop(-1)
-        separated[0] = separated[0][1:len(separated[0])]  # These two commands clean up input for the parser
-        
-        if len(separated) > 3:
-            return await bot.send("This command takes 3 parameters at most!\n \
-            (Syntax: `--w <city>, <state>, <ISO 3166 country code>`)")
-        if len(separated) == 1:
-            city = separated[0]
-            state = ""
-            country = ""
-        elif len(separated) == 2:
-            city = separated[0]
-            state = separated[1]
-            country = ""
-        else:
-            city = separated[0]
-            state = separated[1]
-            country = separated[2]        
+        location = ' '.join(location)
+        location = location.encode('utf-8').decode('utf-8')
+        location = location.replace(" ", "+")
     else:
-        city = ""
-        state = ""
-        country = ""
-    
-    lat, lon = geocode(city, state, country)
-    weatherdata = getweatherdata(lat, lon)
+        location = "curitiba,paraná".encode('utf-8').decode('utf-8')
+
+    weatherdata = getweatherdata(location)
     msg = displayweather(weatherdata)
     default_msg = 'No data!'
     embed = Embed(type='rich')
