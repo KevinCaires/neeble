@@ -95,3 +95,10 @@ IMAGE_TYPES = (
     '.mp4',
     '.gif',
 )
+
+# FREE news API from GOOGLE.
+GOOGLE_NEWS = {
+    'url': os.environ.get('GOOGLE_NEWS_API'),
+    'token': os.environ.get('GOOGLE_NEWS_TOKEN'),
+    'source': 'google-news-br'
+}
