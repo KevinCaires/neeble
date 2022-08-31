@@ -214,7 +214,7 @@ async def weather(bot: object, *location: str) -> str:
     )
     embed.add_field(
         name='Description',
-        value=msg.description if msg.description else default_msg,
+        value=msg.description+f' {msg.icon}' if msg.description and msg.icon else default_msg,
     )
     embed.add_field(
         name='Temperature',

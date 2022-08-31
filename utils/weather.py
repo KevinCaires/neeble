@@ -30,6 +30,54 @@ def displayweather(wdata) -> object:
         description = None
 
     try:
+        icon = wdata['weather'][0]['icon']
+        condition = icon[:2]
+        time = icon[2:]
+        match time:
+            case 'd':
+                match condition:
+                    case '01':
+                        icon = ':sunny:'
+                    case '02':
+                        icon = ':white_sun_cloud:'
+                    case '03':
+                        icon = ':cloud:'
+                    case '04':
+                        icon = ':cloud:'
+                    case '09':
+                        icon = ':cloud_rain:'
+                    case '10':
+                        icon = ':white_sun_rain_cloud:'
+                    case '11':
+                        icon = ':cloud_lightning:'
+                    case '13':
+                        icon = ':snowflake:'
+                    case '50':
+                        icon = ':fog:'
+            case 'n':
+                match condition:
+                    case '01':
+                        icon = ':full_moon:'
+                    case '02':
+                        icon = ':cloud:'
+                    case '03':
+                        icon = ':cloud:'
+                    case '04':
+                        icon = ':cloud:'
+                    case '09':
+                        icon = ':cloud_rain:'
+                    case '10':
+                        icon = ':white_sun_rain_cloud:'
+                    case '11':
+                        icon = ':thunder_cloud_lightning:'
+                    case '13':
+                        icon = ':snowflake:'
+                    case '50':
+                        icon = ':fog:'
+    except:
+        icon = None
+
+    try:
         tempmsg = wdata['main']['temp']
     except:
         tempmsg = None
@@ -62,6 +110,7 @@ def displayweather(wdata) -> object:
     obj = namedtuple('Weather', [
         'name',
         'description',
+        'icon',
         'temp',
         'feels_like',
         'humidity',
@@ -72,6 +121,7 @@ def displayweather(wdata) -> object:
     weather = obj(*(
         name,
         description,
+        icon,
         tempmsg,
         feels_likemsg,
         humiditymsg,
