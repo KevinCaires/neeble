@@ -322,9 +322,10 @@ async def news(bot: object) -> None:
     embed = Embed(type='rich')
 
     for new in news:
+        # TODO: Descomentar o código do match case
         dt = datetime.fromisoformat(new['publishedAt'])
-        embed.add_field(name='Published at', value=dt.date().isoformat(), inline=False)
+        embed.add_field(name='Published at', value=dt.isoformat(), inline=False)
         embed.add_field(name='link', value=new['url'], inline=False)
         embed.add_field(name=new['title'], value=new['description'], inline=False)
-        embed.add_field(name='Img', value=new['urlToImage'])
-        await bot.send(f'**`{new["source"]["name"]}`**', embed=embed)
+
+    return await bot.send(f'**`{new["source"]["name"]}`**', embed=embed)
