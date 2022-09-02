@@ -4,6 +4,8 @@
 
 export DISCORD_BOT_TOKEN=<>
 export OPENWEATHER_API_TOKEN=<>
+export GOOGLE_NEWS_API=<>
+export GOOGLE_NEWS_TOKEN=<>
 export MYSQL_HOST=<>
 export MYSQL_PORT=<>
 export MYSQL_DATABASE=<>

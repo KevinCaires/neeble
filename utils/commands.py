@@ -2,8 +2,10 @@
 Bot commands.
 """
 import logging
+from datetime import datetime
 from random import choice
 
+import pytz
 from discord import Embed, Intents
 from discord.ext import commands
 from settings.config import IMAGE_TYPES, OW_API_CONFIG, PERMISSIONS
@@ -11,6 +13,7 @@ from settings.config import IMAGE_TYPES, OW_API_CONFIG, PERMISSIONS
 from utils.database import (count_quotes, get_by_id, get_quote_contains,
                             get_quotes, remove_quote, set_quote)
 from utils.machine_monitor import Monitor
+from utils.news_paper import News
 from utils.tools import kbytes_to_gbytes
 from utils.weather import displayweather, getweatherdata
 
@@ -308,3 +311,25 @@ async def machine_info(bot: object, *args: str) -> str:
             await bot.send(f'**`{io}`**', embed=embed)
 
         return
+
+
+@client.command(aliases=['nw'])
+async def news(bot: object) -> None:
+    f"""
+    Return some news from Google.
+    """
+    _news = News(quantity=5)
+    news = _news.news()
+    embed = Embed(type='rich')
+
+    for new in news:
+        # TODO: Descomentar o código do match case
+        dt = datetime.fromisoformat(
+            new['publishedAt']
+        ).astimezone(pytz.timezone('America/Sao_Paulo'))
+        embed.add_field(name='Published at', value=dt.isoformat(), inline=False)
+        embed.add_field(name='link', value=new['url'], inline=False)
+        embed.add_field(name=new['title'], value=new['description'], inline=False)
+        embed.add_field(name='---', value='---')
+
+    return await bot.send(f'**`{new["source"]["name"]}`**', embed=embed)

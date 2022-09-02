@@ -85,8 +85,6 @@ OW_API_CONFIG = {
     'wh_url' : 'https://api.openweathermap.org/data/2.5/weather?q=<CITY>&units=metric&appid=<API_ID>'
 }
 
-logger.dictConfig(LOGGING_CONFIG)
-
 # Tuple of image type on image links.
 # e.g: https://cdn.discordapp.com/attachments/720808802340962357/988542480981061702/cat.jpeg
 # e.g: https://cdn.discordapp.com/attachments/720808802340962357/988542480981061702/unknow.png
@@ -97,3 +95,10 @@ IMAGE_TYPES = (
     '.mp4',
     '.gif',
 )
+
+# FREE news API from GOOGLE.
+GOOGLE_NEWS = {
+    'url': os.environ.get('GOOGLE_NEWS_API'),
+    'token': os.environ.get('GOOGLE_NEWS_TOKEN'),
+    'source': 'google-news-br'
+}
