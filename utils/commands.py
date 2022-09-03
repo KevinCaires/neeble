@@ -314,22 +314,51 @@ async def machine_info(bot: object, *args: str) -> str:
 
 
 @client.command(aliases=['nw'])
-async def news(bot: object) -> None:
-    f"""
-    Return some news from Google.
+async def news(bot: object, *options: str) -> None:
     """
-    _news = News(quantity=5)
-    news = _news.news()
+    Return some news from Google.
+    options:
+        quantity: int
+        search: str
+    """
     embed = Embed(type='rich')
+    filter = {}
+    news = None
+
+    if not options:
+        _news = News(quantity=5)
+        news = _news.news()
+
+    else:
+        # Validate option operation.
+        if not all(['=' in op for op in options]):
+            return await bot.send('Blabla')
+
+        for op in options:
+            key, value = op.split('=')
+            filter[key] = value
+
+        _news = News(quantity=filter.get('quantity', 5))
+        news = _news.filter(phrase=filter.get('search'))
+
+    if not news:
+        return
 
     for new in news:
-        # TODO: Descomentar o código do match case
-        dt = datetime.fromisoformat(
-            new['publishedAt']
-        ).astimezone(pytz.timezone('America/Sao_Paulo'))
+        try:
+            dt = datetime.fromisoformat(
+                new['publishedAt']
+            ).astimezone(pytz.timezone('America/Sao_Paulo'))
+        except ValueError:
+            dt = datetime.strptime(new['publishedAt'], '%Y-%m-%dT%H:%M:%Sz')
+        except Exception as e:
+            logger.error(e) 
+            continue
+
+        embed.add_field(name='Font', value=new['source']['name'], inline=False)
         embed.add_field(name='Published at', value=dt.isoformat(), inline=False)
-        embed.add_field(name='link', value=new['url'], inline=False)
+        embed.add_field(name='Link', value=new['url'], inline=False)
         embed.add_field(name=new['title'], value=new['description'], inline=False)
         embed.add_field(name='---', value='---')
 
-    return await bot.send(f'**`{new["source"]["name"]}`**', embed=embed)
+    return await bot.send(f'**`News`**', embed=embed)
