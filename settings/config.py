@@ -100,5 +100,5 @@ IMAGE_TYPES = (
 GOOGLE_NEWS = {
     'url': os.environ.get('GOOGLE_NEWS_API'),
     'token': os.environ.get('GOOGLE_NEWS_TOKEN'),
-    'source': 'google-news-br'
+    'sources': ['google-news-br', 'info-money', 'globo']
 }
