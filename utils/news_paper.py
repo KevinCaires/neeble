@@ -10,16 +10,16 @@ class News:
     Get the information in IBGE API.
     """
     _url = f'{GOOGLE_NEWS["url"]}top-headlines?'\
-        f'sources={GOOGLE_NEWS["source"]}'\
+        f'sources={",".join(GOOGLE_NEWS["sources"])}'\
         f'&apiKey={GOOGLE_NEWS["token"]}'
 
     def __init__(self, quantity: int=5) -> None:
         """
         Constructor.
         """
-        self.quantity = quantity
+        self.quantity = int(quantity)
 
-    def _get_and_resolve_news(self) -> list:
+    def news(self) -> list:
         """
         Get the information based in self.quantity attribute.
         """
@@ -32,8 +32,16 @@ class News:
 
         return content['articles'][:self.quantity]
 
-    def news(self) -> list:
+    def filter(self, phrase: str) -> list:
         """
-        Get news in target based.
+        Filter content by keywords.
         """
-        return self._get_and_resolve_news()
+        _url = f'{self._url}&q={phrase if phrase else ""}'
+        _response = requests.get(url=_url)
+        content, status = _response.json(), _response.status_code
+
+        if not status == 200:
+            logger.error(content)
+            raise Exception(content)
+
+        return content['articles'][:self.quantity]
